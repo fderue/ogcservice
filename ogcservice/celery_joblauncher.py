@@ -52,8 +52,8 @@ def task_joblauncher(self, args):
     request = Request(args, self)
 
     volume_mapping = {
-        '/tasks/{uuid}/outputs'.format(uuid=task_id): '/outputs',
-        '/tasks/{uuid}/inputs'.format(uuid=task_id): '/inputs'
+        '/tmp/ogc/tasks/{uuid}/outputs'.format(uuid=task_id): '/outputs',
+        '/tmp/ogc/tasks/{uuid}/inputs'.format(uuid=task_id): '/inputs'
     }
     if not request.volume_mapping:
         request.volume_mapping = volume_mapping
