@@ -19,8 +19,9 @@ CELERY_RESULT_BACKEND = "amqp"
 CELERY_RESULT_SERIALIZER = 'json'
 
 # Worker settings ------------------------------------------------------------
-CELERYD_PREFETCH_MULTIPLIER = 1
-
+CELERYD_PREFETCH_MULTIPLIER = 2
+CELERY_SEND_EVENTS = True
+CELERY_TASK_RESULT_EXPIRES = 7200
 # Logging settings -----------------------------------------------------------
 CELERYD_TASK_LOG_FORMAT = ("[%(asctime)s: %(levelname)s/%(processName)s] "
                            "[%(task_name)s(%(task_id)s)] - %(name)s - "
