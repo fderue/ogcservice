@@ -70,7 +70,7 @@ def task_joblauncher(self, args):
     # return something like the progression status? 0, 10, 20 ... 10%
     # which goes back into the celery queue
 
-    return {'result': {'type': 'Useless', 'value': args}}
+    return {'result': {'output_url': 'url_to_receive_from_application'}}
 
 
 
