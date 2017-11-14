@@ -61,14 +61,12 @@ def task_joblauncher(self, args):
 
     #Start processing
     request.set_progress(0)
-    run_image(request)
+    error_code = run_image(request)
+    if error_code != 0:
+        raise Exception("Error in running container")
     request.set_progress(50)
     time.sleep(20)  # Fake progression
     request.set_progress(100)
-
-
-    # return something like the progression status? 0, 10, 20 ... 10%
-    # which goes back into the celery queue
 
     return {'result': {'output_url': 'url_to_receive_from_application'}}
 
