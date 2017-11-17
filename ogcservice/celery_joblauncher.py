@@ -75,7 +75,7 @@ def task_joblauncher(self, args):
     if os.path.exists(json_output_file):
         json_output = json.load(open(json_output_file))
     else:
-        json_output = {'outputs':'output_from_application'}
+        json_output = {'outputs': 'output_from_application'}
     # Get output url
     # output_data_url: http://10.1.35.59/fs/tasks/6b0d3c64-5978-483c-9fc3-f37cdb46c821/outputs/outputs/generate_dem_test/DEM_RS2_OK79000_PK698379_DK627315_FQ9W_20160907_013546_HH_VV_HV_VH_SLC_worker2.tif
     # output_data_WMS_url: http://132.217.140.40:8080/geoserver/OGC01/wms?service=WMS&version=1.1.0&request=GetMap&layers=OGC01:RS2_OK79000_PK698379_DK627315_FQ9W_20160907_013546_HH_VV_HV_VH_SLC-2017-08-02T20:30:46.818016Z&styles=&bbox=-118.93031183853228,49.834373782054,-118.15157741042583,50.228387801408914&width=768&height=388&srs=EPSG:4326&format=image%2Fpng&bgcolor=000000
