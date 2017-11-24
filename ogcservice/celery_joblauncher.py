@@ -24,14 +24,14 @@ def get_volume_mapping(volume_mapping=dict()):
 
 def run_image(req):
     if req.param_as_envar:
-        cmd = "docker run --rm {volume} {env_variable} {image}:{version}".format(
+        cmd = "docker run --rm {volume} {env_variable} {image}".format(
             env_variable=get_env_cmd(req.input_data),
             image=req.dockerim_name,
             version=req.dockerim_version,
             volume=get_volume_mapping(req.volume_mapping),
         )
     else:
-        cmd = "docker run --rm {volume} {image}:{version} {double_dash_param}".format(
+        cmd = "docker run --rm {volume} {image} {double_dash_param}".format(
             double_dash_param=get_double_dash_cmd(req.input_data),
             image=req.dockerim_name,
             version=req.dockerim_version,
