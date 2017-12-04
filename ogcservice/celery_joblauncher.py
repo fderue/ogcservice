@@ -26,15 +26,13 @@ def run_image(req):
     if req.param_as_envar:
         cmd = "docker run --rm {volume} {env_variable} {image}".format(
             env_variable=get_env_cmd(req.input_data),
-            image=req.dockerim_name,
-            version=req.dockerim_version,
+            image=req.docker_image,
             volume=get_volume_mapping(req.volume_mapping),
         )
     else:
         cmd = "docker run --rm {volume} {image} {double_dash_param}".format(
             double_dash_param=get_double_dash_cmd(req.input_data),
-            image=req.dockerim_name,
-            version=req.dockerim_version,
+            image=req.docker_image,
             volume=get_volume_mapping(req.volume_mapping),
         )
 
@@ -52,15 +50,17 @@ def task_joblauncher(self, args):
     logger.info("Got request to process task # %s", task_id)
     request = Request(args, self)
 
+    workdir = '/outputs'
     volume_mapping = {
-        '/tmp/ogc/tasks/{uuid}/outputs'.format(uuid=task_id): '/outputs',
+        '/tmp/ogc/tasks/{uuid}/outputs'.format(uuid=task_id): workdir,
         '/tmp/ogc/inputs': '/inputs',
         '/tmp/ogc/data': '/data'
     }
     if not request.volume_mapping:
         request.volume_mapping = volume_mapping
 
-    request.body['input_data']['task_id'] = task_id
+    request.body['input_data']['PtaskId'] = task_id
+    request.body['input_data']['Pworkspace'] = workdir
 
     #Start processing
     request.set_progress(0)
@@ -74,6 +74,9 @@ def task_joblauncher(self, args):
     json_output_file = '/tmp/ogc/tasks/{uuid}/outputs/{uuid}.json'.format(uuid=task_id)
     if os.path.exists(json_output_file):
         json_output = json.load(open(json_output_file))
+        if 'result_url' in json_output.keys():
+            json_output['result_url'] = request.body['IaaS_datastore'] +'/' + task_id + '/outputs' + json_output['result_url']
+
     else:
         json_output = {'outputs': 'output_from_application'}
     # Get output url

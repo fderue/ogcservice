@@ -6,7 +6,7 @@ DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
 def format_body_request(
-        dockerim_name='',
+        docker_image='',
         dockerim_version=None,
         registry_url='',
         input_data={},
@@ -15,9 +15,7 @@ def format_body_request(
         queue_name='celery'):
 
     return {
-        'dockerim_name': dockerim_name,
-        'dockerim_version': dockerim_version,
-        'registry_url': registry_url,
+        'docker_image': docker_image,
         'input_data': input_data,
         'param_as_envar': param_as_envar,
         'volume_mapping': volume_mapping,
@@ -55,9 +53,7 @@ class Request(object):
         self.host = getfqdn()
 
         # Docker params
-        self.registry_url = self.body['registry_url']
-        self.dockerim_name = self.body['dockerim_name']
-        self.dockerim_version = self.body['dockerim_version']
+        self.docker_image = self.body['docker_image']
         self.volume_mapping = self.body['volume_mapping']
 
         # Cloud params
