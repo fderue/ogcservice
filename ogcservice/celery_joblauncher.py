@@ -75,7 +75,7 @@ def task_joblauncher(self, args):
     if os.path.exists(json_output_file):
         json_output = json.load(open(json_output_file))
         if 'result_url' in json_output.keys():
-            json_output['result_url'] = request.body['IaaS_datastore'] +'/' + task_id + '/outputs' + json_output['result_url']
+            json_output['result_url'] = request.input_data['IaaS_datastore'] + '/' + task_id + '/outputs' + json_output['result_url']
 
     else:
         json_output = {'outputs': 'output_from_application'}
