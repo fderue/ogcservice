@@ -72,7 +72,7 @@ def task_joblauncher(self, args):
     time.sleep(20)  # Fake progression
     request.set_progress(100)
 
-    json_output_file = vm_output_dir+container_output_dir+'/{uuid}.json'.format(uuid=task_id)
+    json_output_file = (vm_output_dir+container_output_dir+'/{uuid}.json').format(uuid=task_id)
     if os.path.exists(json_output_file):
         json_output = json.load(open(json_output_file))
         if 'result_url' in json_output.keys():
