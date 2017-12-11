@@ -4,7 +4,7 @@ import time
 from celery_request import Request
 from celery.utils.log import get_task_logger
 import json
-
+import requests
 
 PROCESS_NAME = 'worker.joblauncher'
 CELERY_APP = Celery(PROCESS_NAME)
@@ -50,9 +50,10 @@ def task_joblauncher(self, args):
     logger.info("Got request to process task # %s", task_id)
     request = Request(args, self)
 
-    workdir = '/outputs'
+    vm_output_dir = '/tmp/ogc/tasks/{uuid}'
+    container_output_dir = '/outputs'
     volume_mapping = {
-        '/tmp/ogc/tasks/{uuid}/outputs'.format(uuid=task_id): workdir,
+        (vm_output_dir+container_output_dir).format(uuid=task_id): container_output_dir,
         '/tmp/ogc/inputs': '/inputs',
         '/tmp/ogc/data': '/data'
     }
@@ -60,7 +61,7 @@ def task_joblauncher(self, args):
         request.volume_mapping = volume_mapping
 
     request.body['input_data']['PtaskId'] = task_id
-    request.body['input_data']['Pworkspace'] = workdir
+    request.body['input_data']['Pworkspace'] = container_output_dir
 
     #Start processing
     request.set_progress(0)
@@ -71,11 +72,16 @@ def task_joblauncher(self, args):
     time.sleep(20)  # Fake progression
     request.set_progress(100)
 
-    json_output_file = '/tmp/ogc/tasks/{uuid}/outputs/{uuid}.json'.format(uuid=task_id)
+    json_output_file = vm_output_dir+container_output_dir+'/{uuid}.json'.format(uuid=task_id)
     if os.path.exists(json_output_file):
         json_output = json.load(open(json_output_file))
         if 'result_url' in json_output.keys():
-            json_output['result_url'] = request.input_data['IaaS_datastore'] + '/' + task_id + '/outputs' + json_output['result_url']
+            local_file_path = vm_output_dir + json_output['result_url']
+            # upload to file server
+            file_server_upload_url = request.input_data['IaaS_datastore'] + '/' + task_id + '/outputs'
+            requests.post(file_server_upload_url, files=open(local_file_path, 'rb'))
+
+            json_output['result_url'] = file_server_upload_url + json_output['result_url']
 
     else:
         json_output = {'outputs': 'output_from_application'}
