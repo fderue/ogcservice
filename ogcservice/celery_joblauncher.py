@@ -79,7 +79,7 @@ def task_joblauncher(self, args):
             local_file_path = vm_output_dir + json_output['result_url']
             # upload to file server
             file_server_upload_url = request.input_data['IaaS_datastore'] + '/' + task_id + '/outputs'
-            requests.post(file_server_upload_url, files=open(local_file_path, 'rb'))
+            requests.post(file_server_upload_url, files={'file': open(local_file_path, 'rb')})
 
             json_output['result_url'] = file_server_upload_url + json_output['result_url']
 
