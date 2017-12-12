@@ -50,10 +50,10 @@ def task_joblauncher(self, args):
     logger.info("Got request to process task # %s", task_id)
     request = Request(args, self)
 
-    vm_output_dir = '/tmp/ogc/tasks/{uuid}'
+    vm_output_dir = '/tmp/ogc/tasks/{uuid}'.format(uuid=task_id)
     container_output_dir = '/outputs'
     volume_mapping = {
-        (vm_output_dir+container_output_dir).format(uuid=task_id): container_output_dir,
+        vm_output_dir+container_output_dir: container_output_dir,
         '/tmp/ogc/inputs': '/inputs',
         '/tmp/ogc/data': '/data'
     }
