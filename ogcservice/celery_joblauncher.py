@@ -81,7 +81,7 @@ def task_joblauncher(self, args):
             file_server_upload_url = request.input_data['IaaS_datastore'] + '/' + task_id + '/outputs'
             requests.post(file_server_upload_url, files={'file': open(local_file_path, 'rb')})
 
-            json_output['result_url'] = file_server_upload_url + json_output['result_url']
+            json_output['result_url'] = request.input_data['IaaS_datastore'] + '/' + task_id + json_output['result_url']
 
     else:
         json_output = {'outputs': 'output_from_application'}
